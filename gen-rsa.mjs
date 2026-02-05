@@ -11,7 +11,14 @@ const { privateKey, publicKey } = generateKeyPairSync('rsa', {
   privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
 });
 
-writeFileSync(path.join(outDir, 'jwtRS256.key'), privateKey, { flag: 'wx' });     // wx = ถ้ามีอยู่แล้วจะ error (กันทับ)
+writeFileSync(path.join(outDir, 'jwtRS256.key'), privateKey, { flag: 'wx' });
 writeFileSync(path.join(outDir, 'jwtRS256.key.pub'), publicKey, { flag: 'wx' });
 
-console.log('Generated keys in .secrets/');
+// --- base64 (one-line) ของทั้ง PEM string ---
+const privateKeyB64 = Buffer.from(privateKey, 'utf8').toString('base64');
+const publicKeyB64  = Buffer.from(publicKey, 'utf8').toString('base64');
+
+writeFileSync(path.join(outDir, 'jwtRS256.key.b64'), privateKeyB64 + '\n', { flag: 'wx' });
+writeFileSync(path.join(outDir, 'jwtRS256.key.pub.b64'), publicKeyB64 + '\n', { flag: 'wx' });
+
+console.log('Generated keys in .secrets/ + base64 files (*.b64)');
